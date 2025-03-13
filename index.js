@@ -1,15 +1,20 @@
 const express = require('express');
-const { resolve } = require('path');
+const cors = require('cors');
 
 const app = express();
-const port = 3010;
+app.use(express.json()); 
+app.use(cors()); 
 
-app.use(express.static('static'));
 
-app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
-});
+const userRoutes = require('./controller/routes');
+const connectDB = require('./db');
+app.use('/api', userRoutes); 
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+const PORT = process.env.PORT || 3010;
+const uri = "mongodb+srv://ruchithata83:ruchitha@signup.9jubx.mongodb.net/?retryWrites=true&w=majority&appName=signup"
+
+connectDB(uri);
+
+app.listen(PORT, () => {
+  console.log(`Example app listening at http://localhost:${PORT}`);
 });
